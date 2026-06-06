@@ -4,6 +4,36 @@ import SoundManager from './SoundManager';
 import { generateLeaderboard } from '../games/gameDatabase';
 import { Play, RotateCcw, X, Shield, ArrowUp, Zap, HelpCircle, Trophy } from 'lucide-react';
 
+import MetroSurfer from '../games/MetroSurfer';
+import NeonRider from '../games/NeonRider';
+import Chess from '../games/Chess';
+import Carrom from '../games/Carrom';
+import TypeStorm from '../games/TypeStorm';
+import RoadRoller from '../games/RoadRoller';
+import Connect4 from '../games/Connect4';
+import ArcadeRetro from '../games/ArcadeRetro';
+
+const GAME_COMPONENTS = {
+  'metro-surfer': MetroSurfer,
+  'temple-escape': MetroSurfer,
+  'neon-rider': NeonRider,
+  'turbo-moto': NeonRider,
+  'truck-challenge': NeonRider,
+  'chess-royale': Chess,
+  'carrom-clash': Carrom,
+  'type-storm': TypeStorm,
+  'word-invaders': TypeStorm,
+  'road-roller': RoadRoller,
+  'connect-4': Connect4,
+  'tic-tac-toe': Connect4,
+  'snake-neon': ArcadeRetro,
+  'breakout-glow': ArcadeRetro,
+  'cyber-pong': ArcadeRetro,
+  'space-defender': ArcadeRetro,
+  'flappy-neon': ArcadeRetro,
+};
+
+
 export default function ArcadeCabin({ game, onClose, onGameComplete }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [upgrades, setUpgrades] = useState({ speed: 1, power: 1, luck: 1 });
@@ -118,8 +148,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
       }
 
       // Import specific Custom Game Component
-      // For Vite React bundle, we dynamically render games which we will define next
-      const CustomGameComponent = game.Component;
+      const CustomGameComponent = GAME_COMPONENTS[game.id];
       if (CustomGameComponent) {
         return <CustomGameComponent onComplete={handleCustomGameComplete} onQuit={() => setIsPlaying(false)} />;
       }

@@ -47,11 +47,16 @@ export default function ChatLobby({ profile }) {
   ]);
   const [inputText, setInputText] = useState("");
   const [activePlayers, setActivePlayers] = useState(1284);
-  const chatEndRef = useRef(null);
+  const messageContainerRef = useRef(null);
 
-  // Auto-scroll chat to bottom
+  // Auto-scroll chat to bottom (only within the container, preventing window scroll)
   const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTo({
+        top: messageContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   };
 
   useEffect(() => {
@@ -130,7 +135,10 @@ export default function ChatLobby({ profile }) {
       </div>
 
       {/* Message Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col scrollbar">
+      <div 
+        ref={messageContainerRef}
+        className="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col scrollbar"
+      >
         {messages.map((msg) => (
           <div 
             key={msg.id} 
@@ -147,7 +155,6 @@ export default function ChatLobby({ profile }) {
             </div>
           </div>
         ))}
-        <div ref={chatEndRef} />
       </div>
 
       {/* Quick Message Drawer */}

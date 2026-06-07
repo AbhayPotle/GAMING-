@@ -29,6 +29,22 @@ export default function App() {
     return () => window.removeEventListener('click', handleFirstInteraction);
   }, []);
 
+  // Lock horizontal scroll to x=0 to prevent programmatic or layout shifts
+  useEffect(() => {
+    const resetHorizontalScroll = () => {
+      if (window.scrollX !== 0) {
+        window.scrollTo(0, window.scrollY);
+      }
+    };
+    window.addEventListener('scroll', resetHorizontalScroll);
+    window.addEventListener('resize', resetHorizontalScroll);
+    resetHorizontalScroll();
+    return () => {
+      window.removeEventListener('scroll', resetHorizontalScroll);
+      window.removeEventListener('resize', resetHorizontalScroll);
+    };
+  }, []);
+
   const handleSelectGame = (game) => {
     setActiveGame(game);
   };

@@ -12,6 +12,7 @@ import TypeStorm from '../games/TypeStorm';
 import RoadRoller from '../games/RoadRoller';
 import Connect4 from '../games/Connect4';
 import ArcadeRetro from '../games/ArcadeRetro';
+import SimulatorMiniGame from './SimulatorMiniGame';
 
 const GAME_COMPONENTS = {
   'metro-surfer': MetroSurfer,
@@ -37,8 +38,7 @@ const GAME_COMPONENTS = {
 export default function ArcadeCabin({ game, onClose, onGameComplete }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [upgrades, setUpgrades] = useState({ speed: 1, power: 1, luck: 1 });
-  const [simRunning, setSimRunning] = useState(false);
-  const [simProgress, setSimProgress] = useState(0);
+  const [simActive, setSimActive] = useState(false);
   const [simScore, setSimScore] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   
@@ -46,8 +46,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
   useEffect(() => {
     setLeaderboard(generateLeaderboard(game.id));
     setIsPlaying(false);
-    setSimRunning(false);
-    setSimProgress(0);
+    setSimActive(false);
     setSimScore(null);
   }, [game]);
 
@@ -62,36 +61,14 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
 
   // Launch Simulated Run
   const handleSimulateRun = () => {
-    if (simRunning) return;
     SoundManager.playClick();
-    setSimRunning(true);
-    setSimProgress(0);
+    setSimActive(true);
     setSimScore(null);
-
-    const interval = setInterval(() => {
-      setSimProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          handleSimComplete();
-          return 100;
-        }
-        // Play beep sound at intervals
-        if (prev % 20 === 0) SoundManager.playClick();
-        return prev + 10;
-      });
-    }, 150);
   };
 
-  const handleSimComplete = () => {
-    setSimRunning(false);
-    
-    // Calculate final score based on upgrades
-    const multiplier = (upgrades.speed + upgrades.power * 1.5 + upgrades.luck * 2);
-    const finalScore = Math.floor((1000 + Math.random() * 3000) * multiplier);
+  const handleSimGameComplete = (finalScore) => {
+    setSimActive(false);
     setSimScore(finalScore);
-
-    // Play victory sound
-    SoundManager.playLevelUp();
 
     // Reward player
     onGameComplete(game.coinReward, game.xpReward);
@@ -160,7 +137,12 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
         </div>
       );
     } else {
-      // Simulator screen
+      // Simulator game
+      if (simActive) {
+        return <SimulatorMiniGame game={game} upgrades={upgrades} onComplete={handleSimGameComplete} onQuit={() => setSimActive(false)} />;
+      }
+
+      // Simulator dashboard screen
       return (
         <div className="absolute inset-0 flex flex-col md:flex-row bg-slate-950 p-6 gap-6 overflow-y-auto">
           {/* Simulator Controls & Upgrades */}
@@ -209,33 +191,19 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
 
             {/* Launch simulation */}
             <div className="space-y-3 pt-2">
-              {simRunning ? (
-                <div className="space-y-2">
-                  <div className="flex justify-between text-xs font-bold text-gray-400">
-                    <span>RUNNING COMPILING GRAPHICS...</span>
-                    <span>{simProgress}%</span>
-                  </div>
-                  <div className="w-full h-3.5 bg-black rounded-full overflow-hidden border border-white/10 p-0.5">
-                    <div 
-                      className="h-full bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 rounded-full transition-all duration-150"
-                      style={{ width: `${simProgress}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ) : simScore ? (
+              {simScore ? (
                 <div className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/20 p-4 rounded-xl text-center">
-                  <p className="text-[10px] font-bold text-pink-400 uppercase tracking-widest mb-1">RUN COMPLETED</p>
+                  <p className="text-[10px] font-bold text-pink-400 uppercase tracking-widest mb-1">MISSION COMPLETED</p>
                   <p className="text-3xl font-extrabold text-white tracking-wider mb-2">{simScore.toLocaleString()}</p>
                   <p className="text-xs text-gray-400 font-bold">Rewarded: <span className="text-yellow-400">🪙+{game.coinReward}</span> | <span className="text-amber-500">⭐+{game.xpReward}xp</span></p>
                 </div>
               ) : null}
 
               <button
-                disabled={simRunning}
                 onClick={handleSimulateRun}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-extrabold tracking-widest text-sm uppercase hover:shadow-[0_0_20px_rgba(255,0,127,0.5)] transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-40"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-extrabold tracking-widest text-sm uppercase hover:shadow-[0_0_20px_rgba(255,0,127,0.5)] transition-all hover:scale-[1.01] active:scale-95"
               >
-                {simScore ? "LAUNCH SIMULATION AGAIN" : "START SIMULATED MISSION"}
+                {simScore ? "LAUNCH MISSION AGAIN" : "START PLAYABLE MISSION"}
               </button>
             </div>
           </div>

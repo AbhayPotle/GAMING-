@@ -2,6 +2,7 @@
 import React from 'react';
 import SoundManager from './SoundManager';
 import * as Icons from 'lucide-react';
+import GameThumbnail from './GameThumbnail';
 
 export default function GameCard({ game, onClick }) {
   // Dynamically load the Lucide icon
@@ -54,16 +55,16 @@ export default function GameCard({ game, onClick }) {
       }}
       className={`game-card ${getCardBorderColorClass()} group hover:cursor-pointer`}
     >
-      {/* Decorative gradient header */}
-      <div className={`h-24 bg-gradient-to-br ${game.color} p-4 flex justify-between items-start relative overflow-hidden`}>
-        {/* Abstract glowing patterns */}
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent scale-150"></div>
+      {/* Animated thumbnail header */}
+      <div className="h-24 p-4 flex justify-between items-start relative overflow-hidden bg-black/60">
+        <GameThumbnail game={game} />
+        
         <div className="absolute top-2 right-2 flex gap-1.5 z-10">
           {getPlayabilityBadge()}
         </div>
 
         {/* Floating icon */}
-        <div className="w-12 h-12 rounded-xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300">
+        <div className="w-12 h-12 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300 z-10">
           <IconComponent className="w-6 h-6 text-white" />
         </div>
       </div>

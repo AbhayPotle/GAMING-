@@ -5,6 +5,7 @@ import * as Icons from 'lucide-react';
 import GameThumbnail from './GameThumbnail';
 
 export default function GameCard({ game, onClick }) {
+  const [isHovered, setIsHovered] = React.useState(false);
   // Dynamically load the Lucide icon
   const IconComponent = Icons[game.icon] || Icons.Gamepad2;
 
@@ -38,7 +39,7 @@ export default function GameCard({ game, onClick }) {
           </span>
         );
       case 'simulator':
-        default:
+      default:
         return (
           <span className="px-2 py-0.5 rounded-full text-nano font-extrabold tracking-widest bg-amber-500/20 text-amber-300 border border-amber-400/30 uppercase">
             Simulator
@@ -53,11 +54,13 @@ export default function GameCard({ game, onClick }) {
         SoundManager.playClick();
         onClick(game);
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className={`game-card ${getCardBorderColorClass()} group hover:cursor-pointer`}
     >
       {/* Animated thumbnail header */}
       <div className="game-card-header">
-        <GameThumbnail game={game} />
+        <GameThumbnail game={game} isHovered={isHovered} />
         
         <div className="absolute top-3 right-3 flex gap-1.5 z-10">
           {getPlayabilityBadge()}

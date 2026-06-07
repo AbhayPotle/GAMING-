@@ -240,66 +240,109 @@ export default function NeonRider({ onComplete, onQuit }) {
       ctx.clearRect(0, 0, width, height);
       const state = stateRef.current;
 
-      // Draw Retro background
-      ctx.fillStyle = '#060212';
-      ctx.fillRect(0, 0, width, height);
-
-      // Draw Horizon Neon Sunset
       const horizonY = 160;
-      const sunset = ctx.createLinearGradient(0, 0, 0, horizonY);
-      sunset.addColorStop(0, '#060212');
-      sunset.addColorStop(0.5, '#51113f');
-      sunset.addColorStop(1, '#9b0e52');
-      ctx.fillStyle = sunset;
+      const laneWidth = width / 4;
+
+      // 1. Draw Horizon Neon Sunset & Starry Space Sky
+      const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
+      skyGrad.addColorStop(0, '#04010a');
+      skyGrad.addColorStop(0.5, '#250831');
+      skyGrad.addColorStop(1, '#65093e');
+      ctx.fillStyle = skyGrad;
       ctx.fillRect(0, 0, width, horizonY);
 
-      // Sunset sun
-      ctx.fillStyle = '#ff007f';
+      // Starfield background
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      for (let i = 0; i < 40; i++) {
+        const sx = (Math.sin(i * 99.9) * 0.5 + 0.5) * width;
+        const sy = (Math.cos(i * 33.3) * 0.5 + 0.5) * (horizonY - 20);
+        const size = Math.abs(Math.sin(frame * 0.04 + i)) * 1.5 + 0.5;
+        ctx.fillRect(sx, sy, size, size);
+      }
+
+      // Parallax wireframe synthwave mountains
+      ctx.strokeStyle = '#ff007f';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i <= 8; i++) {
+        const x = (width / 8) * i;
+        const h1 = 30 + Math.sin(i * 1.5 + state.distanceCount * 0.005) * 20;
+        if (i === 0) ctx.moveTo(x, horizonY - h1);
+        else ctx.lineTo(x, horizonY - h1);
+      }
+      ctx.stroke();
+
+      // Cyber Sun with horizontal scanning lines (retro-outrun visual)
+      const sunR = 48;
+      const sunX = width / 2;
+      const sunY = horizonY;
+
+      ctx.save();
+      const sunGrad = ctx.createLinearGradient(sunX, sunY - sunR, sunX, sunY);
+      sunGrad.addColorStop(0, '#fffb00');
+      sunGrad.addColorStop(0.5, '#ff007f');
+      sunGrad.addColorStop(1, '#3b0625');
+      ctx.fillStyle = sunGrad;
       ctx.shadowBlur = 40;
       ctx.shadowColor = '#ff007f';
+
+      // Draw sun shape with cut slices
       ctx.beginPath();
-      ctx.arc(width / 2, horizonY, 50, Math.PI, 0);
+      ctx.arc(sunX, sunY, sunR, Math.PI, 0);
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Sunset grid stripes
-      ctx.fillStyle = '#060212';
-      for (let i = 0; i < 5; i++) {
-        ctx.fillRect(0, horizonY - 45 + i * 10, width, 2 + i * 0.5);
+      // Draw horizontal slicing strips to block out parts of the sun
+      ctx.fillStyle = '#04010a';
+      for (let i = 0; i < 6; i++) {
+        const sh = 1.5 + i * 1.2;
+        const syOffset = horizonY - sunR + 10 + i * 8;
+        if (syOffset < horizonY) {
+          ctx.fillRect(sunX - sunR - 10, syOffset, sunR * 2 + 20, sh);
+        }
       }
+      ctx.restore();
 
-      // Draw Track Street
-      ctx.fillStyle = '#0d0720';
+      // 2. Draw Track Street and Metallic Sides
+      ctx.fillStyle = '#080415';
       ctx.beginPath();
       ctx.moveTo(width / 4, horizonY);
       ctx.lineTo(width - width / 4, horizonY);
-      ctx.lineTo(width - 40, height);
-      ctx.lineTo(40, height);
+      ctx.lineTo(width - 20, height);
+      ctx.lineTo(20, height);
       ctx.closePath();
       ctx.fill();
 
-      // Draw Lane Lines
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
-      ctx.lineWidth = 2;
-      const laneWidth = width / 4;
+      // Shiny glowing borders of the highway
+      ctx.strokeStyle = '#00f0ff';
+      ctx.lineWidth = 4;
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = '#00f0ff';
+      ctx.beginPath();
+      ctx.moveTo(width / 4, horizonY);
+      ctx.lineTo(20, height);
+      ctx.moveTo(width - width / 4, horizonY);
+      ctx.lineTo(width - 20, height);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
+      // 3. Draw Lane division lines in perspective
+      ctx.strokeStyle = 'rgba(157, 78, 221, 0.25)';
+      ctx.lineWidth = 2;
       for (let i = 1; i <= 3; i++) {
         ctx.beginPath();
-        // bottom coordinate
         const bx = laneWidth * i;
-        // top coordinate (perspective)
         const tx = width / 2 + (i - 2) * (width / 12);
-        
         ctx.moveTo(tx, horizonY);
         ctx.lineTo(bx, height);
         ctx.stroke();
       }
 
-      // Street lines dash animations
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      // Scrolling street dashes
+      ctx.strokeStyle = '#ffffff';
       ctx.lineWidth = 3;
-      ctx.setLineDash([20, 30]);
-      ctx.lineDashOffset = -state.distanceCount * 2;
+      ctx.setLineDash([25, 35]);
+      ctx.lineDashOffset = -state.distanceCount * 4;
       
       for (let i = 1.5; i <= 2.5; i += 1.0) {
         ctx.beginPath();
@@ -311,112 +354,253 @@ export default function NeonRider({ onComplete, onQuit }) {
       }
       ctx.setLineDash([]); // clear
 
-      // Draw Nitros (battery canisters)
+      // 4. Draw Nitros (Glowing battery canisters)
       state.nitroList.forEach(nitro => {
         const ratio = (nitro.y - horizonY) / (height - horizonY);
-        if (ratio <= 0) return;
+        if (ratio <= 0 || ratio > 1.2) return;
 
         const bx = nitro.x;
         const tx = width / 2 + ((nitro.x / laneWidth) - 2) * (width / 12);
         const px = tx + (bx - tx) * ratio;
-        const size = Math.max(5, nitro.w * ratio);
+        const size = Math.max(6, nitro.w * ratio);
 
+        ctx.save();
+        ctx.translate(px, nitro.y);
         ctx.shadowBlur = 15;
         ctx.shadowColor = '#00f0ff';
-        ctx.fillStyle = '#00f0ff';
-        ctx.fillRect(px - size / 2, nitro.y - size / 2, size, size);
 
-        // Core glow
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(px - size / 4, nitro.y - size / 4, size / 2, size / 2);
-        ctx.shadowBlur = 0;
+        // Cylinder body gradient
+        const cylGrad = ctx.createLinearGradient(-size/2, -size/2, size/2, size/2);
+        cylGrad.addColorStop(0, '#00ffff');
+        cylGrad.addColorStop(0.5, '#ffffff');
+        cylGrad.addColorStop(1, '#0284c7');
+        ctx.fillStyle = cylGrad;
+        
+        // Draw cylinder shape
+        ctx.beginPath();
+        ctx.roundRect(-size / 2, -size / 1.5, size, size * 1.3, 4 * ratio);
+        ctx.fill();
+
+        // Metallic copper caps
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(-size / 2, -size / 1.5, size, 2 * ratio + 1);
+        ctx.fillRect(-size / 2, size * 0.6, size, 2 * ratio + 1);
+
+        // Core lightning bolts/plus symbol
+        ctx.fillStyle = '#0f172a';
+        ctx.font = `bold ${Math.max(5, 10 * ratio)}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('+', 0, 0);
+
+        ctx.restore();
       });
 
-      // Draw Traffic Cars
+      // 5. Draw Traffic Cars (3 distinct styles: Cyber Sports, Sedan, Heavy Cargo Truck)
       state.traffic.forEach(car => {
         const ratio = (car.y - horizonY) / (height - horizonY);
-        if (ratio <= 0) return;
+        if (ratio <= 0 || ratio > 1.2) return;
 
         const bx = car.x;
         const tx = width / 2 + ((car.x / laneWidth) - 2) * (width / 12);
         const px = tx + (bx - tx) * ratio;
 
-        const cw = Math.max(8, car.w * ratio);
-        const ch = Math.max(12, car.h * ratio);
+        const cw = Math.max(10, car.w * ratio * 1.1);
+        const ch = Math.max(14, car.h * ratio * 1.1);
 
-        ctx.shadowBlur = 10;
+        ctx.save();
+        ctx.translate(px, car.y);
+        ctx.shadowBlur = 12;
         ctx.shadowColor = car.color;
 
-        ctx.fillStyle = car.color;
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.roundRect(px - cw / 2, car.y - ch / 2, cw, ch, 4 * ratio);
-        ctx.fill();
-        ctx.stroke();
+        // Choose vehicle design based on speed/ID
+        const carType = Math.abs(Math.floor(car.id)) % 3;
 
-        // Tail lights
-        ctx.fillStyle = '#f00';
-        ctx.beginPath();
-        ctx.arc(px - cw / 3, car.y + ch / 3, 2 * ratio, 0, Math.PI * 2);
-        ctx.arc(px + cw / 3, car.y + ch / 3, 2 * ratio, 0, Math.PI * 2);
-        ctx.fill();
+        if (carType === 0) {
+          // Cyber sports car
+          ctx.fillStyle = car.color;
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 1 * ratio + 0.3;
+          ctx.beginPath();
+          ctx.roundRect(-cw / 2, -ch / 2, cw, ch, 6 * ratio);
+          ctx.fill();
+          ctx.stroke();
 
-        ctx.shadowBlur = 0;
+          // Windshield glass
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(-cw / 2.8, -ch / 5, (cw / 2.8) * 2, ch / 4);
+
+          // Headlights and Rear Spoiler
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(-cw/2, -ch/2 + 2, 2 * ratio + 1, 3 * ratio);
+          ctx.fillRect(cw/2 - (2*ratio+1), -ch/2 + 2, 2 * ratio + 1, 3 * ratio);
+
+          // Brake lights
+          ctx.fillStyle = '#ef4444';
+          ctx.fillRect(-cw / 2.8, ch / 2 - 3, 2 * ratio + 1, 2);
+          ctx.fillRect(cw / 2.8 - (2 * ratio + 1), ch / 2 - 3, 2 * ratio + 1, 2);
+        }
+        else if (carType === 1) {
+          // Cyber sedan
+          ctx.fillStyle = car.color;
+          ctx.beginPath();
+          ctx.roundRect(-cw / 2.2, -ch / 2, cw / 1.1, ch, 3 * ratio);
+          ctx.fill();
+
+          // Windshield (front) and rear window
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(-cw / 3, -ch / 4, (cw / 3) * 2, ch / 5);
+          ctx.fillRect(-cw / 3, ch / 4, (cw / 3) * 2, ch / 6);
+
+          // Glowing side stripes
+          ctx.fillStyle = '#00f0ff';
+          ctx.fillRect(-cw / 2.2, -ch / 3, 1, ch / 1.5);
+          ctx.fillRect(cw / 2.2 - 1, -ch / 3, 1, ch / 1.5);
+        }
+        else {
+          // Cyber Cargo Truck
+          ctx.fillStyle = '#334155'; // metal grey cabin
+          ctx.fillRect(-cw / 2.2, -ch / 2, cw / 1.1, ch / 3);
+
+          // Glowing neon container
+          ctx.fillStyle = car.color;
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = car.color;
+          ctx.fillRect(-cw / 1.9, -ch / 6, cw * 1.05, ch / 1.5);
+          
+          // Container lines
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1;
+          for (let l = 0; l < 4; l++) {
+            ctx.beginPath();
+            ctx.moveTo(-cw / 1.9, -ch / 6 + l * (ch / 6));
+            ctx.lineTo(cw / 1.9, -ch / 6 + l * (ch / 6));
+            ctx.stroke();
+          }
+        }
+
+        ctx.restore();
       });
 
-      // Draw Particles
+      // 6. Draw Particles
       state.particles.forEach(p => {
         ctx.save();
         ctx.globalAlpha = p.alpha;
         ctx.fillStyle = p.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = p.color;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       });
 
-      // Draw Player Sports Car
+      // 7. Draw Player Sports Car (Lamborghini/DeLorean style)
       const px = state.playerX;
       const py = height - 100;
       const pw = 30;
       const ph = 52;
 
+      ctx.save();
       ctx.shadowBlur = 25;
       ctx.shadowColor = '#39ff14';
 
-      // Engine Thruster Glow
-      const thrusterGrad = ctx.createLinearGradient(px, py + ph / 2, px, py + ph / 2 + 15);
-      thrusterGrad.addColorStop(0, '#39ff14');
-      thrusterGrad.addColorStop(1, 'transparent');
-      ctx.fillStyle = thrusterGrad;
-      ctx.fillRect(px - 6, py + ph / 2, 12, 15);
+      // Rocket Exhaust Flame Sparks behind the vehicle
+      if (frame % 2 === 0) {
+        state.particles.push({
+          x: px - 6 + (Math.random() - 0.5) * 4,
+          y: py + ph / 2 + 2,
+          vx: (Math.random() - 0.5) * 1,
+          vy: 3 + Math.random() * 2,
+          radius: Math.random() * 2.5 + 0.5,
+          color: '#39ff14',
+          alpha: 0.9,
+          life: 0.04
+        });
+        state.particles.push({
+          x: px + 6 + (Math.random() - 0.5) * 4,
+          y: py + ph / 2 + 2,
+          vx: (Math.random() - 0.5) * 1,
+          vy: 3 + Math.random() * 2,
+          radius: Math.random() * 2.5 + 0.5,
+          color: '#39ff14',
+          alpha: 0.9,
+          life: 0.04
+        });
+      }
 
-      // Car Body
-      ctx.fillStyle = '#060212';
+      // Exhaust flame plume gradients
+      const plume = ctx.createLinearGradient(px, py + ph / 2, px, py + ph / 2 + 18);
+      plume.addColorStop(0, '#39ff14');
+      plume.addColorStop(0.3, '#00ffff');
+      plume.addColorStop(1, 'transparent');
+      ctx.fillStyle = plume;
+      ctx.fillRect(px - 8, py + ph / 2, 4, 16);
+      ctx.fillRect(px + 4, py + ph / 2, 4, 16);
+
+      // Cyber tires with glowing rims
+      ctx.fillStyle = '#1e293b';
+      ctx.strokeStyle = '#39ff14';
+      ctx.lineWidth = 1.5;
+      // Front tires
+      ctx.fillRect(px - pw / 2 - 2, py - ph / 2.5, 3, 10);
+      ctx.strokeRect(px - pw / 2 - 2, py - ph / 2.5, 3, 10);
+      ctx.fillRect(px + pw / 2 - 1, py - ph / 2.5, 3, 10);
+      ctx.strokeRect(px + pw / 2 - 1, py - ph / 2.5, 3, 10);
+      // Rear tires
+      ctx.fillRect(px - pw / 2 - 3, py + ph / 5, 4, 12);
+      ctx.strokeRect(px - pw / 2 - 3, py + ph / 5, 4, 12);
+      ctx.fillRect(px + pw / 2 - 1, py + ph / 5, 4, 12);
+      ctx.strokeRect(px + pw / 2 - 1, py + ph / 5, 4, 12);
+
+      // Shaded futuristic supercar body (Countach style)
+      const carGrad = ctx.createLinearGradient(px - pw/2, py - ph/2, px + pw/2, py + ph/2);
+      carGrad.addColorStop(0, '#090518');
+      carGrad.addColorStop(0.5, '#190a36');
+      carGrad.addColorStop(1, '#04010b');
+      ctx.fillStyle = carGrad;
       ctx.strokeStyle = '#39ff14';
       ctx.lineWidth = 2.5;
+      
+      // Draw angular car shell
       ctx.beginPath();
-      ctx.roundRect(px - pw / 2, py - ph / 2, pw, ph, 8);
+      ctx.moveTo(px - pw / 3, py - ph / 2); // front center nose
+      ctx.lineTo(px + pw / 3, py - ph / 2);
+      ctx.lineTo(px + pw / 2, py - ph / 3); // front right corner
+      ctx.lineTo(px + pw / 2, py + ph / 3); // rear right side
+      ctx.lineTo(px + pw / 2 - 2, py + ph / 2); // rear right corner
+      ctx.lineTo(px - pw / 2 + 2, py + ph / 2); // rear left corner
+      ctx.lineTo(px - pw / 2, py + ph / 3); // rear left side
+      ctx.lineTo(px - pw / 2, py - ph / 3); // front left corner
+      ctx.closePath();
       ctx.fill();
       ctx.stroke();
 
-      // Spoiler wing
+      // Visor cockpit windshield
+      ctx.fillStyle = '#00f0ff';
+      ctx.beginPath();
+      ctx.roundRect(px - pw / 3.2, py - ph / 6, (pw / 3.2) * 2, ph / 4, 2);
+      ctx.fill();
+      
+      // Cockpit reflections
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.beginPath();
+      ctx.moveTo(px - pw / 4, py - ph / 6);
+      ctx.lineTo(px - pw / 6, py + ph / 12);
+      ctx.lineTo(px - pw / 4, py + ph / 12);
+      ctx.closePath();
+      ctx.fill();
+
+      // Spoiler wing winglets
       ctx.fillStyle = '#39ff14';
       ctx.fillRect(px - pw / 2 - 4, py + ph / 2 - 6, pw + 8, 4);
 
-      // Cockpit windshield
-      ctx.fillStyle = '#00f0ff';
-      ctx.beginPath();
-      ctx.roundRect(px - pw / 3, py - ph / 4, (pw / 3) * 2, ph / 4, 3);
-      ctx.fill();
+      // Tail lights
+      ctx.fillStyle = '#ff003c';
+      ctx.fillRect(px - pw / 2 + 2, py + ph / 2 - 3, 5, 2);
+      ctx.fillRect(px + pw / 2 - 7, py + ph / 2 - 3, 5, 2);
 
-      // Neon headlight decals
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(px - pw / 3, py - ph / 2 + 4, 4, 4);
-      ctx.fillRect(px + pw / 3 - 4, py - ph / 2 + 4, 4, 4);
-
-      ctx.shadowBlur = 0;
+      ctx.restore();
     };
 
     const loop = () => {

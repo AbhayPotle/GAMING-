@@ -239,64 +239,82 @@ export default function Carrom({ onComplete, onQuit }) {
       ctx.clearRect(0, 0, size, size);
       const state = stateRef.current;
 
-      // Draw Wood Neon Board
-      ctx.fillStyle = '#060212';
+      // Draw Wood Neon Board Background
+      ctx.fillStyle = '#05020d';
       ctx.fillRect(0, 0, size, size);
-      ctx.strokeStyle = '#9d4edd';
+      
+      // Board border bezel
+      ctx.strokeStyle = '#7c3aed';
       ctx.lineWidth = 14;
       ctx.strokeRect(0, 0, size, size);
 
-      // Inner thin cyan border
+      // Inner thin cyan border lines
       ctx.strokeStyle = '#00f0ff';
       ctx.lineWidth = 1.5;
       ctx.strokeRect(15, 15, size - 30, size - 30);
 
-      // Pockets
+      // Corners pocket bases
       state.pocketsList.forEach(p => {
-        ctx.fillStyle = '#000';
+        // Deep depth gradient for pockets
+        const pocketGrad = ctx.createRadialGradient(p.x, p.y, p.r * 0.2, p.x, p.y, p.r);
+        pocketGrad.addColorStop(0, '#000000');
+        pocketGrad.addColorStop(0.7, '#080512');
+        pocketGrad.addColorStop(1, '#ff007f'); // glowing pocket rim
+        ctx.fillStyle = pocketGrad;
         ctx.strokeStyle = '#ff007f';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fill();
         ctx.stroke();
       });
 
-      // Center Circle & Concentric Rings
-      ctx.strokeStyle = 'rgba(255, 0, 127, 0.4)';
+      // Center Concentric Rings and Star Pattern
+      ctx.strokeStyle = 'rgba(255, 0, 127, 0.35)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.arc(size / 2, size / 2, 40, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(size / 2, size / 2, 8, 0, Math.PI * 2);
-      ctx.fillStyle = '#ff007f';
-      ctx.fill();
-
-      // Baselines
+      
       ctx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
-      ctx.lineWidth = 1.5;
-      // bottom baseline
       ctx.beginPath();
-      ctx.moveTo(50, size - 60);
-      ctx.lineTo(size - 50, size - 60);
+      ctx.arc(size / 2, size / 2, 48, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Baseline knobs
-      ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';
+      // Center red point
+      ctx.fillStyle = '#ff007f';
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = '#ff007f';
       ctx.beginPath();
-      ctx.arc(50, size - 60, 6, 0, Math.PI * 2);
-      ctx.arc(size - 50, size - 60, 6, 0, Math.PI * 2);
+      ctx.arc(size / 2, size / 2, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // Drawing baseline guide tracks
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+      ctx.lineWidth = 1.5;
+      
+      // Bottom, Top, Left, Right baseline stripes
+      const pad = 60;
+      ctx.strokeRect(pad, pad, size - pad * 2, size - pad * 2);
+
+      // Baseline knobs
+      ctx.fillStyle = 'rgba(0, 240, 255, 0.3)';
+      ctx.beginPath();
+      ctx.arc(pad, pad, 5, 0, Math.PI * 2);
+      ctx.arc(size - pad, pad, 5, 0, Math.PI * 2);
+      ctx.arc(pad, size - pad, 5, 0, Math.PI * 2);
+      ctx.arc(size - pad, size - pad, 5, 0, Math.PI * 2);
       ctx.fill();
 
       // Draw Aim Assist Line
       if (state.isAiming) {
-        ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.6)';
         ctx.lineWidth = 1.5;
         ctx.setLineDash([4, 4]);
         ctx.beginPath();
         ctx.moveTo(state.striker.x, state.striker.y);
-        const aimLength = 100;
+        const aimLength = 110;
         const ax = state.striker.x + Math.cos(aimAngle) * aimLength;
         const ay = state.striker.y + Math.sin(aimAngle) * aimLength;
         ctx.lineTo(ax, ay);
@@ -304,42 +322,87 @@ export default function Carrom({ onComplete, onQuit }) {
         ctx.setLineDash([]); // clear
       }
 
-      // Draw Pieces
+      // Draw 3D Shaded Carrom Pieces
       state.pieces.forEach(p => {
+        ctx.save();
+        ctx.translate(p.x, p.y);
         ctx.shadowBlur = 8;
         ctx.shadowColor = p.color;
+
+        // Radial highlight gradient for 3D metallic/wooden coin look
+        const coinGrad = ctx.createRadialGradient(-p.r * 0.25, -p.r * 0.25, p.r * 0.1, 0, 0, p.r);
+        coinGrad.addColorStop(0, '#ffffff'); // glossy highlight reflection
+        coinGrad.addColorStop(0.35, p.color);
+        coinGrad.addColorStop(0.85, '#05020d'); // dark bezel edges
+        coinGrad.addColorStop(1, '#000000');
+        ctx.fillStyle = coinGrad;
+
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Concentric circular grooved ridges on the coin
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.lineWidth = 0.8;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r * 0.65, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.beginPath();
+        ctx.arc(0, 0, p.r * 0.45, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Small center hub dot
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(0, 0, p.r * 0.22, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+
+        ctx.restore();
       });
 
-      // Draw Striker
+      // Draw Shaded Cyber Striker
       const stk = state.striker;
-      ctx.shadowBlur = 15;
+      ctx.save();
+      ctx.translate(stk.x, stk.y);
+      ctx.shadowBlur = 18;
       ctx.shadowColor = stk.color;
-      ctx.fillStyle = stk.color;
-      ctx.beginPath();
-      ctx.arc(stk.x, stk.y, stk.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#fff';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-      ctx.shadowBlur = 0;
 
-      // Draw small striker core crosshair
-      ctx.strokeStyle = '#000';
+      // Radial chrome reflective gradient
+      const stkGrad = ctx.createRadialGradient(-stk.r * 0.3, -stk.r * 0.3, stk.r * 0.08, 0, 0, stk.r);
+      stkGrad.addColorStop(0, '#ffffff'); // shiny chrome spot
+      stkGrad.addColorStop(0.25, '#c2f3ff');
+      stkGrad.addColorStop(0.45, stk.color); // main cyan body
+      stkGrad.addColorStop(0.85, '#0c4a6e'); // deep shadows
+      stkGrad.addColorStop(1, '#000000');
+      ctx.fillStyle = stkGrad;
+
+      ctx.beginPath();
+      ctx.arc(0, 0, stk.r, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Outer ring border
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Inner striker decaling rings
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, stk.r * 0.6, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Center crosshair aiming lines
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.7)';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(stk.x - 5, stk.y);
-      ctx.lineTo(stk.x + 5, stk.y);
-      ctx.moveTo(stk.x, stk.y - 5);
-      ctx.lineTo(stk.x, stk.y + 5);
+      ctx.moveTo(-6, 0); ctx.lineTo(6, 0);
+      ctx.moveTo(0, -6); ctx.lineTo(0, 6);
       ctx.stroke();
+
+      ctx.restore();
     };
 
     const loop = () => {

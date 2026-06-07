@@ -196,12 +196,20 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 380px;
+  height: 440px;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(20, 12, 48, 0.6) 0%, rgba(8, 4, 24, 0.8) 100%);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.game-card-header {
+  height: 180px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .game-card::after {
@@ -488,6 +496,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .relative { position: relative; }
 .absolute { position: absolute; }
+.pointer-events-none { pointer-events: none; }
 .fixed { position: fixed; }
 .inset-0 { top: 0; left: 0; right: 0; bottom: 0; }
 .top-0 { top: 0; }
@@ -876,4 +885,47 @@ h1, h2, h3, h4, h5, h6 {
     display: flex;
   }
 }
+
+/* Screen Shake Animation */
+.screen-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, -1px, 0); }
+  20%, 80% { transform: translate3d(3px, 2px, 0); }
+  30%, 50%, 70% { transform: translate3d(-5px, -3px, 0); }
+  40%, 60% { transform: translate3d(5px, 3px, 0); }
+}
+
+/* Chip Drop Gravity Animation */
+.animate-chip-drop {
+  animation: chip-drop 0.45s cubic-bezier(.25,.46,.45,.94) both;
+}
+
+@keyframes chip-drop {
+  0% { transform: translateY(-380px); opacity: 0; }
+  60% { transform: translateY(0); opacity: 1; }
+  78% { transform: translateY(-16px); }
+  100% { transform: translateY(0); }
+}
+
+/* CRT Screen Scanline Overlay Filter */
+.crt-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.28) 50%
+  ), linear-gradient(
+    90deg, 
+    rgba(255, 0, 0, 0.05), 
+    rgba(0, 255, 0, 0.02), 
+    rgba(0, 0, 255, 0.05)
+  );
+  background-size: 100% 4px, 6px 100%;
+}
+
+
 

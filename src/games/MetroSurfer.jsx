@@ -11,6 +11,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
   const [gameOver, setGameOver] = useState(false);
   const [distance, setDistance] = useState(0);
   const [currentSpeed, setCurrentSpeed] = useState(4.5);
+  const [isShaking, setIsShaking] = useState(false);
 
   const stateRef = useRef({
     playerLane: 1, // 0 = Left, 1 = Middle, 2 = Right
@@ -35,6 +36,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
     setGameOver(false);
     setDistance(0);
     setCurrentSpeed(4.5);
+    setIsShaking(false);
 
     stateRef.current = {
       playerLane: 1,
@@ -214,6 +216,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
               SoundManager.playHit();
               SoundManager.playGameOver();
               setGameOver(true);
+              setIsShaking(true);
               onComplete(score + coins * 10);
             }
           }
@@ -660,7 +663,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
   }, [isPlaying, gameOver, score]);
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none">
+    <div className={`absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none ${isShaking ? 'screen-shake' : ''}`}>
       {/* HUD Stats */}
       <div className="bg-slate-950 px-4 py-2 border-b border-white/10 flex justify-between items-center text-xs font-bold text-gray-400">
         <div className="flex gap-4">

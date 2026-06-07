@@ -56,15 +56,15 @@ export default function GameCard({ game, onClick }) {
       className={`game-card ${getCardBorderColorClass()} group hover:cursor-pointer`}
     >
       {/* Animated thumbnail header */}
-      <div className="h-24 p-4 flex justify-between items-start relative overflow-hidden bg-black/60">
+      <div className="game-card-header">
         <GameThumbnail game={game} />
         
-        <div className="absolute top-2 right-2 flex gap-1.5 z-10">
+        <div className="absolute top-3 right-3 flex gap-1.5 z-10">
           {getPlayabilityBadge()}
         </div>
 
         {/* Floating icon */}
-        <div className="w-12 h-12 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300 z-10">
+        <div className="absolute bottom-3 left-3 w-12 h-12 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300 z-10">
           <IconComponent className="w-6 h-6 text-white" />
         </div>
       </div>

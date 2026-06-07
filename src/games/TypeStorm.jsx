@@ -20,6 +20,13 @@ export default function TypeStorm({ onComplete, onQuit }) {
   const [typedInput, setTypedInput] = useState("");
   const [currentLevel, setCurrentLevel] = useState(1);
   const [lives, setLives] = useState(3);
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
+
   
   // Game states in refs for canvas render loop
   const gameStateRef = useRef({
@@ -56,6 +63,8 @@ export default function TypeStorm({ onComplete, onQuit }) {
     setLives(3);
     setCurrentLevel(1);
     setTypedInput("");
+    setIsShaking(false);
+
     
     gameStateRef.current = {
       meteors: [],
@@ -126,7 +135,9 @@ export default function TypeStorm({ onComplete, onQuit }) {
         // Check ground collision
         if (m.y > height - 60) {
           SoundManager.playHit();
+          triggerShake();
           setLives(prev => {
+
             if (prev <= 1) {
               setGameOver(true);
               SoundManager.playGameOver();
@@ -379,7 +390,8 @@ export default function TypeStorm({ onComplete, onQuit }) {
   }, [isPlaying, gameOver, typedCount]);
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none">
+    <div className={`absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none ${isShaking ? 'screen-shake' : ''}`}>
+
       {/* Game Header Stats */}
       <div className="bg-slate-950 px-4 py-2 border-b border-white/10 flex justify-between items-center text-xs font-bold text-gray-400">
         <div className="flex gap-4">

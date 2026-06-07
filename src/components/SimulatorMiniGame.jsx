@@ -25,17 +25,34 @@ export default function SimulatorMiniGame({ game, upgrades, onComplete, onQuit }
     elapsedFrames: 0
   });
 
+  const handleGameEnd = () => {
+    setGameEnded(true);
+    SoundManager.playLevelUp();
+    
+    // Scale score based on power multiplier
+    const finalScore = Math.floor(stateRef.current.scoreVal * stateRef.current.powerMult);
+    setScore(finalScore);
+
+    // Call onComplete after 2s delay to show final score
+    setTimeout(() => {
+      onComplete(finalScore);
+    }, 2000);
+  };
+
   // Countdown timer before game start
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => {
         SoundManager.playClick();
-        setCountdown(countdown - 1);
+        setCountdown(prev => {
+          if (prev === 1) {
+            SoundManager.playPowerup();
+            setGameStarted(true);
+          }
+          return prev - 1;
+        });
       }, 1000);
       return () => clearTimeout(timer);
-    } else {
-      SoundManager.playPowerup();
-      setGameStarted(true);
     }
   }, [countdown]);
 
@@ -55,20 +72,6 @@ export default function SimulatorMiniGame({ game, upgrades, onComplete, onQuit }
     }, 1000);
     return () => clearInterval(interval);
   }, [gameStarted, gameEnded]);
-
-  const handleGameEnd = () => {
-    setGameEnded(true);
-    SoundManager.playLevelUp();
-    
-    // Scale score based on power multiplier
-    const finalScore = Math.floor(stateRef.current.scoreVal * stateRef.current.powerMult);
-    setScore(finalScore);
-
-    // Call onComplete after 2s delay to show final score
-    setTimeout(() => {
-      onComplete(finalScore);
-    }, 2000);
-  };
 
   // Keyboard controls
   useEffect(() => {

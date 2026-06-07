@@ -647,8 +647,11 @@ export default function ArcadeRetro({ onComplete, onQuit }) {
           </div>
         ) : (
           /* Subgame gameplay canvas */
-          <div className="w-full h-full relative">
+          <div className="w-full h-full relative overflow-hidden">
             <canvas ref={canvasRef} className="w-full h-full block" />
+            
+            {/* CRT Screen Scanline Overlay Filter */}
+            <div className="absolute inset-0 pointer-events-none crt-scanlines opacity-20"></div>
 
             {/* Play overlay */}
             {!isPlaying && (

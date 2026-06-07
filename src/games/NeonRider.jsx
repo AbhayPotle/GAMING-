@@ -10,6 +10,7 @@ export default function NeonRider({ onComplete, onQuit }) {
   const [fuel, setFuel] = useState(100);
   const [speed, setSpeed] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
 
   const stateRef = useRef({
     playerX: 200,
@@ -31,6 +32,7 @@ export default function NeonRider({ onComplete, onQuit }) {
     setFuel(100);
     setSpeed(0);
     setGameOver(false);
+    setIsShaking(false);
 
     stateRef.current = {
       playerX: 200,
@@ -192,6 +194,7 @@ export default function NeonRider({ onComplete, onQuit }) {
           SoundManager.playHit();
           SoundManager.playGameOver();
           setGameOver(true);
+          setIsShaking(true);
           onComplete(score);
         }
 
@@ -617,7 +620,7 @@ export default function NeonRider({ onComplete, onQuit }) {
   }, [isPlaying, gameOver, score]);
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none">
+    <div className={`absolute inset-0 flex flex-col bg-black overflow-hidden font-display select-none ${isShaking ? 'screen-shake' : ''}`}>
       {/* Racer HUD Dashboard */}
       <div className="bg-slate-950 px-4 py-2.5 border-b border-white/10 flex justify-between items-center text-xs font-bold text-gray-400">
         <div className="flex gap-4 items-center">

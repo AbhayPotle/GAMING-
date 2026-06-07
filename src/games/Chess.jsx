@@ -38,6 +38,13 @@ export default function Chess({ onComplete, onQuit }) {
   const [gameOver, setGameOver] = useState(false);
   const [winner, setWinner] = useState(null);
   const [statusMessage, setStatusMessage] = useState("Your turn! Command your holo-army.");
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
+
 
   const handleStartGame = (mode) => {
     SoundManager.playClick();
@@ -50,6 +57,8 @@ export default function Chess({ onComplete, onQuit }) {
     setWinner(null);
     setStatusMessage(mode === 'ai' ? "Your turn! Defeat the Cyber CPU." : "White's turn. Duel your companion!");
     setIsPlaying(true);
+    setIsShaking(false);
+
   };
 
   // Check if a cell is inside board bounds
@@ -153,7 +162,13 @@ export default function Chess({ onComplete, onQuit }) {
     updatedBoard[toR][toC] = piece;
     updatedBoard[fromR][fromC] = null;
 
-    SoundManager.playClick();
+    if (targetPiece) {
+      SoundManager.playExplosion();
+      triggerShake();
+    } else {
+      SoundManager.playClick();
+    }
+
 
     // Check if King was captured
     if (targetPiece && targetPiece[1] === 'k') {
@@ -221,7 +236,13 @@ export default function Chess({ onComplete, onQuit }) {
     updatedBoard[chosenMove.to.r][chosenMove.to.c] = piece;
     updatedBoard[chosenMove.from.r][chosenMove.from.c] = null;
 
-    SoundManager.playLaser(); // bot sound
+    if (targetPiece) {
+      SoundManager.playExplosion();
+      triggerShake();
+    } else {
+      SoundManager.playLaser(); // bot sound
+    }
+
 
     if (targetPiece && targetPiece[1] === 'k') {
       setWinner('b');
@@ -258,7 +279,8 @@ export default function Chess({ onComplete, onQuit }) {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display">
+    <div className={`absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display ${isShaking ? 'screen-shake' : ''}`}>
+
       {/* Game Header Bar */}
       <div className="bg-slate-950 px-5 py-3 border-b border-white/10 flex justify-between items-center text-xs">
         <div className="flex items-center gap-3 text-cyan-400">

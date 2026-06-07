@@ -40,15 +40,16 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
   const [upgrades, setUpgrades] = useState({ speed: 1, power: 1, luck: 1 });
   const [simActive, setSimActive] = useState(false);
   const [simScore, setSimScore] = useState(null);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [leaderboard, setLeaderboard] = useState(() => generateLeaderboard(game.id));
+  const [prevGameId, setPrevGameId] = useState(game.id);
   
-  // Load simulated leaderboard
-  useEffect(() => {
+  if (game.id !== prevGameId) {
+    setPrevGameId(game.id);
     setLeaderboard(generateLeaderboard(game.id));
     setIsPlaying(false);
     setSimActive(false);
     setSimScore(null);
-  }, [game]);
+  }
 
   // Handle upgrade clicks
   const handleUpgrade = (stat) => {

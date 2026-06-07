@@ -14,6 +14,13 @@ export default function Carrom({ onComplete, onQuit }) {
   const [power, setPower] = useState(0);
   const [isCharging, setIsCharging] = useState(false);
   const [canAim, setCanAim] = useState(true);
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
+
 
   const stateRef = useRef({
     striker: { x: 200, y: 340, vx: 0, vy: 0, r: 15, mass: 2.5, color: '#00f0ff', isStriker: true },
@@ -33,6 +40,8 @@ export default function Carrom({ onComplete, onQuit }) {
     setPower(0);
     setIsCharging(false);
     setCanAim(true);
+    setIsShaking(false);
+
 
     const size = stateRef.current.boardSize;
     stateRef.current.striker = { x: size / 2, y: size - 60, vx: 0, vy: 0, r: 16, mass: 3, color: '#00f0ff', isStriker: true };
@@ -157,9 +166,14 @@ export default function Carrom({ onComplete, onQuit }) {
             o2.vx += p * o1.mass * nx;
             o2.vy += p * o1.mass * ny;
 
-            if (Math.abs(o1.vx) + Math.abs(o1.vy) > 0.4) {
+            const totalSpeed = Math.abs(o1.vx) + Math.abs(o1.vy);
+            if (totalSpeed > 0.4) {
               SoundManager.playClick();
+              if (totalSpeed > 6.5) {
+                triggerShake();
+              }
             }
+
           }
         }
       }
@@ -196,13 +210,15 @@ export default function Carrom({ onComplete, onQuit }) {
           const dy = piece.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           
-          if (dist < p.r) {
-            // Pocketed!
-            SoundManager.playPowerup();
-            state.pieces.splice(index, 1);
-            setPockets(prev => prev + 1);
-            setScore(prev => prev + (piece.isQueen ? 100 : 50));
-          }
+            if (dist < p.r) {
+              // Pocketed!
+              SoundManager.playPowerup();
+              triggerShake();
+              state.pieces.splice(index, 1);
+              setPockets(prev => prev + 1);
+              setScore(prev => prev + (piece.isQueen ? 100 : 50));
+            }
+
         });
       });
 
@@ -470,7 +486,8 @@ export default function Carrom({ onComplete, onQuit }) {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display">
+    <div className={`absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display ${isShaking ? 'screen-shake' : ''}`}>
+
       {/* Game Header Bar */}
       <div className="bg-slate-950 px-5 py-3 border-b border-white/10 flex justify-between items-center text-xs">
         <div className="flex gap-4 items-center">

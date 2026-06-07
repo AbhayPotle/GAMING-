@@ -19,6 +19,13 @@ export default function Connect4({ onComplete, onQuit }) {
   const [winner, setWinner] = useState(null); // 'R', 'Y', or 'Tie'
   const [gameOver, setGameOver] = useState(false);
   const [botMessage, setBotMessage] = useState("Drop a chip to begin!");
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerShake = () => {
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
+
 
   const handleStartGame = (mode) => {
     SoundManager.playClick();
@@ -29,6 +36,8 @@ export default function Connect4({ onComplete, onQuit }) {
     setGameOver(false);
     setBotMessage(mode === 'ai' ? "Good luck! Cyber CPU is ready." : "Red Player goes first!");
     setIsPlaying(true);
+    setIsShaking(false);
+
   };
 
   // Find lowest empty row in column
@@ -84,6 +93,8 @@ export default function Connect4({ onComplete, onQuit }) {
     updated[row][col] = turn;
     setBoard(updated);
     SoundManager.playClick();
+    triggerShake();
+
 
     const winResult = checkWin(updated);
     if (winResult) {
@@ -154,6 +165,8 @@ export default function Connect4({ onComplete, onQuit }) {
     updated[row][chosenCol] = 'Y';
     setBoard(updated);
     SoundManager.playLaser(); // CPU sound
+    triggerShake();
+
 
     const winResult = checkWin(updated);
     if (winResult) {
@@ -184,7 +197,8 @@ export default function Connect4({ onComplete, onQuit }) {
   };
 
   return (
-    <div className="absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display">
+    <div className={`absolute inset-0 flex flex-col bg-[#070314] overflow-hidden select-none font-display ${isShaking ? 'screen-shake' : ''}`}>
+
       {/* HUD Header */}
       <div className="bg-slate-950 px-5 py-3 border-b border-white/10 flex justify-between items-center text-xs">
         <div className="flex items-center gap-3 text-cyan-400">
@@ -255,11 +269,12 @@ export default function Connect4({ onComplete, onQuit }) {
                         className="aspect-square rounded-full bg-black/60 border border-white/10 flex items-center justify-center shadow-inner"
                       >
                         {cell === 'R' && (
-                          <div className="w-5/6 h-5/6 rounded-full bg-gradient-to-tr from-red-600 to-rose-400 shadow-[0_0_12px_rgba(239,68,68,0.7)] border border-red-500 animate-fade-in"></div>
+                          <div className="w-5/6 h-5/6 rounded-full bg-gradient-to-tr from-red-600 to-rose-400 shadow-[0_0_12px_rgba(239,68,68,0.7)] border border-red-500 animate-chip-drop"></div>
                         )}
                         {cell === 'Y' && (
-                          <div className="w-5/6 h-5/6 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.7)] border border-yellow-400 animate-fade-in"></div>
+                          <div className="w-5/6 h-5/6 rounded-full bg-gradient-to-tr from-yellow-500 to-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.7)] border border-yellow-400 animate-chip-drop"></div>
                         )}
+
                       </div>
                     );
                   })

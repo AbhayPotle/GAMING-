@@ -60,7 +60,7 @@ export default function GameGrid({ games, onSelectGame }) {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search games (e.g. Chess, Carrom, Subway Surfers)..."
-            className="w-full bg-black/50 border border-white/10 rounded-xl pl-11 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.1)] transition-all"
+            className="w-full bg-black/50 border border-white/10 rounded-xl pl-11 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-cyan-400 focus-shadow-cyan transition-all"
           />
         </div>
 
@@ -81,7 +81,7 @@ export default function GameGrid({ games, onSelectGame }) {
           </button>
 
           {/* Sort Selector */}
-          <div className="relative flex items-center bg-white/5 border border-white/10 rounded-xl px-3 py-2 w-full sm:w-[180px] hover:border-white/20 transition-all">
+          <div className="relative flex items-center bg-white/5 border border-white/10 rounded-xl px-3 py-2 w-full sort-select-wrapper hover:border-white/20 transition-all">
             <ArrowUpDown className="w-4 h-4 text-gray-500 mr-2" />
             <select
               value={sortBy}

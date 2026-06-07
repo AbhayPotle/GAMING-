@@ -27,19 +27,19 @@ export default function Navbar({ profile, setProfile, xp, level, coins, openProf
           <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-500 to-yellow-300 text-glow-cyan">
             KIDDYARCADE ULTRA
           </h1>
-          <p className="text-[10px] text-cyan-400 uppercase tracking-widest font-bold">8K Revolutionized Arcade Portal</p>
+          <p className="text-micro text-cyan-400 uppercase tracking-widest font-bold">8K Revolutionized Arcade Portal</p>
         </div>
       </div>
 
       {/* Stats and User Controls */}
       <div className="flex flex-wrap items-center gap-4 md:gap-8 justify-center w-full md:w-auto">
         {/* XP Level Bar */}
-        <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5 w-full sm:w-[260px] md:w-[280px]">
+        <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5 w-full navbar-level-bar">
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-400/10 text-yellow-400 border border-yellow-400/20">
             <span className="font-extrabold text-sm">{level}</span>
           </div>
           <div className="flex-1">
-            <div className="flex justify-between text-[11px] font-bold text-gray-400 mb-1">
+            <div className="flex justify-between text-xxs font-bold text-gray-400 mb-1">
               <span>LEVEL {level}</span>
               <span>{xp} / {xpNeeded} XP</span>
             </div>
@@ -82,7 +82,7 @@ export default function Navbar({ profile, setProfile, xp, level, coins, openProf
               <User className="w-4 h-4" />
             )}
           </div>
-          <span className="font-bold hidden sm:inline max-w-[100px] truncate">{profile.gamerTag}</span>
+          <span className="font-bold hidden sm:inline gamer-tag-text truncate">{profile.gamerTag}</span>
         </button>
       </div>
     </nav>

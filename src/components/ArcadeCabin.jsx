@@ -148,13 +148,13 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
           {/* Simulator Controls & Upgrades */}
           <div className="flex-1 flex flex-col justify-between space-y-4">
             <div>
-              <span className="text-[10px] font-bold text-amber-400 uppercase tracking-widest">{game.category} Simulator</span>
+              <span className="text-micro font-bold text-amber-400 uppercase tracking-widest">{game.category} Simulator</span>
               <h3 className="text-2xl font-black text-white uppercase tracking-wider text-glow-pink mb-2">{game.title}</h3>
               <p className="text-xs text-gray-400 mb-4 leading-relaxed">{game.description}</p>
               
               {/* Upgrades panel */}
               <div className="space-y-3 bg-white/5 border border-white/5 rounded-xl p-4">
-                <h4 className="text-[10px] font-extrabold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-micro font-extrabold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
                   <Zap className="w-3.5 h-3.5 text-cyan-400" /> Upgrade Tuning
                 </h4>
                 <div className="space-y-2.5">
@@ -169,7 +169,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
                               key={dot} 
                               className={`w-2.5 h-2.5 rounded-full ${
                                 upgrades[stat] >= dot 
-                                  ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 shadow-[0_0_5px_rgba(0,240,255,0.5)]' 
+                                  ? 'bg-gradient-to-tr from-cyan-400 to-blue-500 shadow-cyan-sm' 
                                   : 'bg-white/10'
                               }`}
                             ></div>
@@ -178,7 +178,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
                         <button
                           disabled={upgrades[stat] >= 5}
                           onClick={() => handleUpgrade(stat)}
-                          className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-black border border-cyan-400/20 disabled:opacity-30 disabled:pointer-events-none transition-all uppercase"
+                          className="px-2 py-0.5 rounded text-micro font-extrabold bg-cyan-500/10 hover:bg-cyan-500 text-cyan-400 hover:text-black border border-cyan-400/20 disabled:opacity-30 disabled:pointer-events-none transition-all uppercase"
                         >
                           + Tune
                         </button>
@@ -193,7 +193,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
             <div className="space-y-3 pt-2">
               {simScore ? (
                 <div className="bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-500/20 p-4 rounded-xl text-center">
-                  <p className="text-[10px] font-bold text-pink-400 uppercase tracking-widest mb-1">MISSION COMPLETED</p>
+                  <p className="text-micro font-bold text-pink-400 uppercase tracking-widest mb-1">MISSION COMPLETED</p>
                   <p className="text-3xl font-extrabold text-white tracking-wider mb-2">{simScore.toLocaleString()}</p>
                   <p className="text-xs text-gray-400 font-bold">Rewarded: <span className="text-yellow-400">🪙+{game.coinReward}</span> | <span className="text-amber-500">⭐+{game.xpReward}xp</span></p>
                 </div>
@@ -201,7 +201,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
 
               <button
                 onClick={handleSimulateRun}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-extrabold tracking-widest text-sm uppercase hover:shadow-[0_0_20px_rgba(255,0,127,0.5)] transition-all hover:scale-[1.01] active:scale-95"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-extrabold tracking-widest text-sm uppercase hover-shadow-pink transition-all hover:scale-105 active:scale-95"
               >
                 {simScore ? "LAUNCH MISSION AGAIN" : "START PLAYABLE MISSION"}
               </button>
@@ -209,7 +209,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
           </div>
 
           {/* Simulator Leaderboard Sidebar */}
-          <div className="w-full md:w-[180px] bg-black/40 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
+          <div className="w-full md-w-180 bg-black/40 border border-white/5 rounded-xl p-4 flex flex-col justify-between">
             <div>
               <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-1">
                 <Trophy className="w-3.5 h-3.5 text-yellow-400" /> LOBBY TOP 5
@@ -223,7 +223,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
                     }`}
                   >
                     <div className="flex items-center gap-1.5 truncate">
-                      <span className="text-[10px] font-extrabold text-gray-500">#{player.rank}</span>
+                      <span className="text-micro font-extrabold text-gray-500">#{player.rank}</span>
                       <span className="truncate">{player.name}</span>
                     </div>
                     <span>{player.score}</span>
@@ -232,7 +232,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
               </div>
             </div>
             
-            <div className="text-[9px] text-gray-500 mt-4 border-t border-white/5 pt-2 uppercase tracking-wider font-semibold text-center">
+            <div className="text-nano text-gray-500 mt-4 border-t border-white/5 pt-2 uppercase tracking-wider font-semibold text-center">
               Compete live with players online!
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-      <div className="w-full max-w-5xl h-[650px] flex flex-col arcade-container">
+      <div className="w-full arcade-modal-container flex flex-col arcade-container">
         
         {/* Header Ribbon bar */}
         <div className="bg-[#12082b] px-5 py-3 border-b border-cyan-500/30 flex items-center justify-between">
@@ -274,10 +274,10 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
           <div className="flex items-center gap-3">
             {/* Simulated Joystick */}
             <div className="w-14 h-14 rounded-full bg-black border-2 border-white/20 flex items-center justify-center shadow-inner">
-              <div className="w-6 h-6 rounded-full bg-red-600 shadow-[0_0_10px_rgba(239,68,68,0.8)] border border-red-500 hover:scale-110 active:scale-90 transition-transform"></div>
+              <div className="w-6 h-6 rounded-full bg-red-600 shadow-red-joystick border border-red-500 hover:scale-110 active:scale-90 transition-transform"></div>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">CONTROL JOYSTICK</p>
+              <p className="text-micro font-bold text-gray-500 uppercase tracking-widest">CONTROL JOYSTICK</p>
               <p className="text-xs font-bold text-cyan-400 uppercase tracking-wider">CYBER STICK V1</p>
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
               <div className="w-3.5 h-3.5 rounded-full bg-pink-500 animate-pulse"></div>
               <div className="w-3.5 h-3.5 rounded-full bg-yellow-500 animate-pulse"></div>
             </div>
-            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-1.5">Arcade status ready</span>
+            <span className="text-nano font-bold text-gray-500 uppercase tracking-widest mt-1.5">Arcade status ready</span>
           </div>
 
           <div className="flex items-center gap-3">
@@ -308,7 +308,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
               </button>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-right">ACTION BUTTONS</p>
+              <p className="text-micro font-bold text-gray-500 uppercase tracking-widest text-right">ACTION BUTTONS</p>
               <p className="text-xs font-bold text-pink-400 uppercase tracking-wider text-right">8K RESPONSE</p>
             </div>
           </div>

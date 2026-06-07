@@ -46,7 +46,7 @@ export default function ProfileModal({ profile, setProfile, onClose }) {
               maxLength={15}
               value={tag} 
               onChange={(e) => setTag(e.target.value)}
-              className="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white font-bold tracking-wider focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_15px_rgba(0,240,255,0.2)] transition-all text-center text-lg"
+              className="w-full bg-black/60 border border-white/10 rounded-lg px-4 py-3 text-white font-bold tracking-wider focus:outline-none focus:border-cyan-400 focus-shadow-cyan transition-all text-center text-lg"
               placeholder="Enter Gamer Tag..."
             />
           </div>
@@ -64,7 +64,7 @@ export default function ProfileModal({ profile, setProfile, onClose }) {
                   }}
                   className={`aspect-square text-3xl rounded-xl flex items-center justify-center border transition-all duration-200 transform hover:scale-110 ${
                     avatar === emoji 
-                      ? 'bg-cyan-500/20 border-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.3)]' 
+                      ? 'bg-cyan-500/20 border-cyan-400 shadow-cyan-md' 
                       : 'bg-white/5 border-white/10 hover:bg-white/10'
                   }`}
                 >

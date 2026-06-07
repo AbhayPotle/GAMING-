@@ -27,20 +27,20 @@ export default function GameCard({ game, onClick }) {
     switch (game.type) {
       case 'custom':
         return (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-widest bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 uppercase">
+          <span className="px-2 py-0.5 rounded-full text-nano font-extrabold tracking-widest bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 uppercase">
             Playable
           </span>
         );
       case 'arcade':
         return (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-widest bg-lime-500/20 text-lime-300 border border-lime-400/30 uppercase">
+          <span className="px-2 py-0.5 rounded-full text-nano font-extrabold tracking-widest bg-lime-500/20 text-lime-300 border border-lime-400/30 uppercase">
             Classic Arcade
           </span>
         );
       case 'simulator':
         default:
         return (
-          <span className="px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-widest bg-amber-500/20 text-amber-300 border border-amber-400/30 uppercase">
+          <span className="px-2 py-0.5 rounded-full text-nano font-extrabold tracking-widest bg-amber-500/20 text-amber-300 border border-amber-400/30 uppercase">
             Simulator
           </span>
         );
@@ -73,8 +73,8 @@ export default function GameCard({ game, onClick }) {
       <div className="flex-1 p-5 flex flex-col justify-between bg-black/40">
         <div>
           <div className="flex justify-between items-center mb-1">
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{game.category}</span>
-            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${difficultyColors[game.difficulty] || difficultyColors.Medium}`}>
+            <span className="text-micro font-bold text-gray-500 uppercase tracking-widest">{game.category}</span>
+            <span className={`px-2 py-0.5 rounded-full text-nano font-bold border ${difficultyColors[game.difficulty] || difficultyColors.Medium}`}>
               {game.difficulty}
             </span>
           </div>
@@ -89,7 +89,7 @@ export default function GameCard({ game, onClick }) {
         {/* Footer Stat Details */}
         <div className="flex justify-between items-center border-t border-white/5 pt-3 mt-2">
           <div className="flex items-center gap-1">
-            <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest mr-1">Rewards:</span>
+            <span className="text-nano font-bold text-gray-500 uppercase tracking-widest mr-1">Rewards:</span>
             <div className="flex items-center gap-0.5 text-yellow-400 text-xs font-bold">
               <span>🪙</span>
               <span>{game.coinReward}</span>
@@ -100,7 +100,7 @@ export default function GameCard({ game, onClick }) {
             </div>
           </div>
           
-          <span className="text-[10px] font-extrabold text-cyan-400 group-hover:underline uppercase tracking-widest flex items-center gap-1">
+          <span className="text-micro font-extrabold text-cyan-400 group-hover:underline uppercase tracking-widest flex items-center gap-1">
             Start 
             <span className="transform translate-x-0 group-hover:translate-x-1 transition-transform">→</span>
           </span>

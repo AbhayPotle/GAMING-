@@ -631,3 +631,103 @@ h1, h2, h3, h4, h5, h6 {
 .aspect-ratio-16-9 { aspect-ratio: 16 / 9; }
 .bg-opacity-90 { background-color: rgba(6, 2, 18, 0.9); }
 
+/* Custom Layout Utilities to avoid escaped bracket minifier bugs */
+.max-w-1600 {
+  max-width: 1600px;
+}
+.z-overlay {
+  z-index: 100;
+}
+.text-micro {
+  font-size: 10px;
+}
+.text-nano {
+  font-size: 9px;
+}
+.text-xxs {
+  font-size: 11px;
+}
+
+/* ChatLobby Custom Sidebar styles */
+.chat-lobby-panel {
+  width: 100%;
+  height: 500px;
+  flex-shrink: 0;
+}
+@media (min-width: 1024px) {
+  .chat-lobby-panel {
+    width: 320px !important;
+    height: calc(100vh - 140px) !important;
+    position: sticky;
+    top: 96px;
+  }
+}
+
+/* Navbar Custom Stat Bar Styles */
+.navbar-level-bar {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .navbar-level-bar {
+    width: 260px;
+  }
+}
+@media (min-width: 768px) {
+  .navbar-level-bar {
+    width: 280px;
+  }
+}
+
+.gamer-tag-text {
+  max-width: 100px;
+}
+
+/* GameGrid Select Option Styles */
+.sort-select-wrapper {
+  width: 100%;
+}
+@media (min-width: 640px) {
+  .sort-select-wrapper {
+    width: 180px;
+  }
+}
+
+/* Arcade Cabin Modal Styling */
+.arcade-modal-container {
+  width: 100%;
+  max-width: 1024px;
+  height: 650px;
+}
+
+.md-w-180 {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .md-w-180 {
+    width: 180px;
+  }
+}
+
+/* Custom Neon Shadow Glows */
+.hover-shadow-cyan:hover {
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
+}
+.shadow-cyan-sm {
+  box-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+}
+.hover-shadow-pink:hover {
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+}
+.shadow-red-joystick {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+}
+.shadow-cyan-md {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+.focus-shadow-cyan:focus {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+}
+.shadow-pink-md {
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+}
+

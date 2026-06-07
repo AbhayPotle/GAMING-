@@ -75,7 +75,7 @@ export default function App() {
       />
 
       {/* Main Layout Area */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full max-w-[1600px] mx-auto">
+      <main className="flex-1 flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full max-w-1600 mx-auto">
         {/* Games Section */}
         <div className="flex-1">
           <div className="mb-6">
@@ -115,7 +115,7 @@ export default function App() {
 
       {/* Level Up Flash Splash overlay */}
       {levelUpEffect && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md">
+        <div className="fixed inset-0 z-overlay flex items-center justify-center bg-black/85 backdrop-blur-md">
           <div className="glass-panel w-full max-w-sm border-2 border-yellow-400 p-8 text-center level-up-animate relative overflow-hidden shadow-2xl shadow-yellow-500/10">
             {/* Background elements */}
             <div className="absolute -top-10 -left-10 w-24 h-24 rounded-full bg-yellow-400/20 blur-xl"></div>
@@ -128,7 +128,7 @@ export default function App() {
             <p className="text-gray-400 text-sm mb-6 uppercase tracking-wider">You reached a new gaming tier</p>
             
             <div className="bg-white/5 border border-yellow-400/25 p-4 rounded-xl mb-6">
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">New Rank</span>
+              <span className="text-micro font-bold text-gray-500 uppercase tracking-widest block mb-1">New Rank</span>
               <span className="text-2xl font-black text-yellow-400 uppercase tracking-widest flex items-center justify-center gap-1.5">
                 <Award className="w-6 h-6 text-yellow-400" /> TIER LEVEL {level}
               </span>
@@ -139,7 +139,7 @@ export default function App() {
                 SoundManager.playClick();
                 setLevelUpEffect(false);
               }}
-              className="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-black text-sm uppercase tracking-widest shadow-lg shadow-yellow-500/20 hover:scale-[1.02] active:scale-95 transition-all"
+              className="w-full py-3 rounded-xl bg-gradient-to-r from-yellow-400 to-amber-500 text-black font-black text-sm uppercase tracking-widest shadow-lg shadow-yellow-500/20 hover:scale-105 active:scale-95 transition-all"
             >
               AWESOME! CONTINUE
             </button>

@@ -114,7 +114,7 @@ export default function ChatLobby({ profile }) {
   };
 
   return (
-    <div className="glass-panel w-full lg:w-[320px] flex flex-col h-[500px] lg:h-[calc(100vh-140px)] border border-white/10 shrink-0 sticky-sidebar">
+    <div className="glass-panel chat-lobby-panel flex flex-col border border-white/10 shrink-0">
       {/* Header */}
       <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
         <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function ChatLobby({ profile }) {
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></div>
-          <span className="text-[11px] font-bold text-green-400 tracking-wider">
+          <span className="text-xxs font-bold text-green-400 tracking-wider">
             {activePlayers} ONLINE
           </span>
         </div>
@@ -138,7 +138,7 @@ export default function ChatLobby({ profile }) {
           >
             <div className="flex items-center gap-1 mb-1">
               <span className="text-xs">{msg.avatar}</span>
-              <span className={`text-[10px] font-extrabold tracking-wider ${msg.self ? 'text-purple-400' : 'text-cyan-400'}`}>
+              <span className={`text-micro font-extrabold tracking-wider ${msg.self ? 'text-purple-400' : 'text-cyan-400'}`}>
                 {msg.sender}
               </span>
             </div>
@@ -152,7 +152,7 @@ export default function ChatLobby({ profile }) {
 
       {/* Quick Message Drawer */}
       <div className="px-4 py-2 border-t border-white/10 bg-black/20">
-        <p className="text-[10px] font-bold text-gray-500 uppercase mb-1.5 tracking-widest">Quick Chat</p>
+        <p className="text-micro font-bold text-gray-500 uppercase mb-1.5 tracking-widest">Quick Chat</p>
         <div className="flex flex-wrap gap-1.5">
           {QUICK_MESSAGES.map((qm) => (
             <button
@@ -189,7 +189,7 @@ export default function ChatLobby({ profile }) {
       </form>
 
       {/* Safety Badge */}
-      <div className="p-2 bg-black/40 border-t border-white/5 flex items-center justify-center gap-1.5 text-[9px] font-bold text-gray-500 uppercase tracking-widest">
+      <div className="p-2 bg-black/40 border-t border-white/5 flex items-center justify-center gap-1.5 text-nano font-bold text-gray-500 uppercase tracking-widest">
         <ShieldCheck className="w-3.5 h-3.5 text-green-500" />
         Kid Safe Mod active
       </div>

@@ -17,7 +17,7 @@ export default function Navbar({ profile, setProfile, xp, level, coins, openProf
   const xpPercentage = Math.min(100, (xp / xpNeeded) * 100);
 
   return (
-    <nav className="glass-panel w-full px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 border-b border-white/10 sticky top-0 z-40 bg-opacity-90">
+    <nav className="glass-panel navbar-layout w-full border-b border-white/10 sticky top-0 z-40 bg-opacity-90">
       {/* Title Logo */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-cyan-500 to-pink-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
@@ -32,7 +32,7 @@ export default function Navbar({ profile, setProfile, xp, level, coins, openProf
       </div>
 
       {/* Stats and User Controls */}
-      <div className="flex flex-wrap items-center gap-4 md:gap-8 justify-center w-full md:w-auto">
+      <div className="navbar-controls-wrapper">
         {/* XP Level Bar */}
         <div className="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-full border border-white/5 w-full navbar-level-bar">
           <div className="flex items-center justify-center w-8 h-8 rounded-full bg-yellow-400/10 text-yellow-400 border border-yellow-400/20">
@@ -82,7 +82,7 @@ export default function Navbar({ profile, setProfile, xp, level, coins, openProf
               <User className="w-4 h-4" />
             )}
           </div>
-          <span className="font-bold hidden sm:inline gamer-tag-text truncate">{profile.gamerTag}</span>
+          <span className="font-bold gamer-tag-text truncate hide-on-mobile">{profile.gamerTag}</span>
         </button>
       </div>
     </nav>

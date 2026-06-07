@@ -82,6 +82,7 @@ export default function NeonRider({ onComplete, onQuit }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
+    let frame = 0;
 
     const dpr = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
@@ -604,6 +605,7 @@ export default function NeonRider({ onComplete, onQuit }) {
     };
 
     const loop = () => {
+      frame++;
       updatePhysics();
       draw();
       animId = requestAnimationFrame(loop);

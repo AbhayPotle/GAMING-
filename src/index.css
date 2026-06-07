@@ -731,3 +731,149 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
 }
 
+/* Layout and Responsiveness Classes (replaces fragile Tailwind colon selectors) */
+.main-content-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+@media (min-width: 1024px) {
+  .main-content-layout {
+    flex-direction: row;
+    padding: 1.5rem;
+  }
+}
+
+.games-section-wrapper {
+  width: 100%;
+  flex: none;
+}
+@media (min-width: 1024px) {
+  .games-section-wrapper {
+    flex: 1 1 0%;
+  }
+}
+
+.navbar-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+}
+@media (min-width: 768px) {
+  .navbar-layout {
+    flex-direction: row;
+  }
+}
+
+.navbar-controls-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .navbar-controls-wrapper {
+    gap: 2rem;
+    width: auto;
+  }
+}
+
+.hide-on-mobile {
+  display: none;
+}
+@media (min-width: 640px) {
+  .hide-on-mobile {
+    display: inline;
+  }
+}
+
+.show-on-mobile {
+  display: inline;
+}
+@media (min-width: 640px) {
+  .show-on-mobile {
+    display: none;
+  }
+}
+
+.grid-controls-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .grid-controls-panel {
+    flex-direction: row;
+  }
+}
+
+.search-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .search-input-wrapper {
+    flex: 1 1 0%;
+  }
+}
+
+.grid-actions-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .grid-actions-wrapper {
+    width: auto;
+  }
+}
+
+.games-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+@media (min-width: 640px) {
+  .games-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .games-grid-layout {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .games-grid-layout {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.simulator-dashboard-layout {
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 768px) {
+  .simulator-dashboard-layout {
+    flex-direction: row;
+  }
+}
+
+.hide-on-mobile-flex {
+  display: none;
+}
+@media (min-width: 640px) {
+  .hide-on-mobile-flex {
+    display: flex;
+  }
+}
+

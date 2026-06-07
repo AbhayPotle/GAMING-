@@ -10,6 +10,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
   const [coins, setCoins] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [distance, setDistance] = useState(0);
+  const [currentSpeed, setCurrentSpeed] = useState(4.5);
 
   const stateRef = useRef({
     playerLane: 1, // 0 = Left, 1 = Middle, 2 = Right
@@ -33,6 +34,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
     setCoins(0);
     setGameOver(false);
     setDistance(0);
+    setCurrentSpeed(4.5);
 
     stateRef.current = {
       playerLane: 1,
@@ -90,6 +92,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
+    let frame = 0;
 
     // Adjust canvas resolution for 8K sharp renders
     const dpr = window.devicePixelRatio || 1;
@@ -152,6 +155,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
       state.distanceCount += state.speed * 0.05;
       setDistance(Math.floor(state.distanceCount));
       state.speed = 4.5 + (state.distanceCount / 300);
+      setCurrentSpeed(Math.round(state.speed * 10) / 10);
 
       // Handle Lane interpolation
       const laneDiff = state.targetLane - state.playerLane;
@@ -644,6 +648,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
     };
 
     const loop = () => {
+      frame++;
       updatePhysics();
       draw();
       animId = requestAnimationFrame(loop);
@@ -663,7 +668,7 @@ export default function MetroSurfer({ onComplete, onQuit }) {
           <span className="text-cyan-400">DISTANCE: 🏃 {distance}m</span>
         </div>
         <div className="flex gap-4">
-          <span className="text-pink-500">SPEED: {Math.round(stateRef.current.speed * 10) / 10}x</span>
+          <span className="text-pink-500">SPEED: {currentSpeed}x</span>
           <span className="text-emerald-400">SCORE: {score + coins * 10}</span>
         </div>
       </div>

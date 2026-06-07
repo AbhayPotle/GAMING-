@@ -23,6 +23,11 @@ const PIECE_NAMES = {
   r: 'Rook', n: 'Knight', b: 'Bishop', q: 'Queen', k: 'King', p: 'Pawn'
 };
 
+// Helper defined outside component to satisfy React purity check rules
+const getRandomItem = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
 export default function Chess({ onComplete, onQuit }) {
   const [board, setBoard] = useState(INITIAL_BOARD);
   const [selected, setSelected] = useState(null); // { r, c }
@@ -204,9 +209,9 @@ export default function Chess({ onComplete, onQuit }) {
       chosenMove = kingCaptures[0];
     } else if (captures.length > 0) {
       // Pick random capture
-      chosenMove = captures[Math.floor(Math.random() * captures.length)];
+      chosenMove = getRandomItem(captures);
     } else {
-      chosenMove = allMoves[Math.floor(Math.random() * allMoves.length)];
+      chosenMove = getRandomItem(allMoves);
     }
 
     const updatedBoard = currentBoard.map(row => [...row]);

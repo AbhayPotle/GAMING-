@@ -13,6 +13,7 @@ export default function Carrom({ onComplete, onQuit }) {
   const [strikerX, setStrikerX] = useState(200);
   const [power, setPower] = useState(0);
   const [isCharging, setIsCharging] = useState(false);
+  const [canAim, setCanAim] = useState(true);
 
   const stateRef = useRef({
     striker: { x: 200, y: 340, vx: 0, vy: 0, r: 15, mass: 2.5, color: '#00f0ff', isStriker: true },
@@ -31,6 +32,7 @@ export default function Carrom({ onComplete, onQuit }) {
     setGameOver(false);
     setPower(0);
     setIsCharging(false);
+    setCanAim(true);
 
     const size = stateRef.current.boardSize;
     stateRef.current.striker = { x: size / 2, y: size - 60, vx: 0, vy: 0, r: 16, mass: 3, color: '#00f0ff', isStriker: true };
@@ -215,12 +217,14 @@ export default function Carrom({ onComplete, onQuit }) {
           state.striker.x = size / 2;
           state.striker.y = size - 60;
           state.isAiming = true;
+          setCanAim(true);
         }
       });
 
       // If everything stops, return to aiming state
       if (!anyMoving && !state.isAiming) {
         state.isAiming = true;
+        setCanAim(true);
         state.striker.x = strikerX;
         state.striker.y = size - 60;
         state.striker.vx = 0;
@@ -428,7 +432,7 @@ export default function Carrom({ onComplete, onQuit }) {
 
   // Charging controls
   const handleAimMouseDown = () => {
-    if (!stateRef.current.isAiming || gameOver) return;
+    if (!canAim || gameOver) return;
     setIsCharging(true);
     setPower(0);
   };
@@ -455,6 +459,7 @@ export default function Carrom({ onComplete, onQuit }) {
     // Shoot the striker
     const state = stateRef.current;
     state.isAiming = false;
+    setCanAim(false);
     
     const force = Math.max(2, power) * 1.5;
     state.striker.vx = Math.cos(aimAngle) * force;
@@ -473,7 +478,7 @@ export default function Carrom({ onComplete, onQuit }) {
         </div>
         <div className="text-cyan-400 font-extrabold uppercase tracking-widest flex items-center gap-1.5">
           <Target className="w-4 h-4 text-cyan-400" />
-          {stateRef.current.isAiming ? "PLACE STRIKER & FIRE!" : "WAIT FOR PIECES TO SETTLE"}
+          {canAim ? "PLACE STRIKER & FIRE!" : "WAIT FOR PIECES TO SETTLE"}
         </div>
         <div className="text-pink-500 font-bold uppercase tracking-wider">SCORE: {score}</div>
       </div>
@@ -499,7 +504,7 @@ export default function Carrom({ onComplete, onQuit }) {
             </div>
 
             {/* Controls Drawer */}
-            {stateRef.current.isAiming && (
+            {canAim && (
               <div className="w-full space-y-3 bg-white/5 border border-white/5 p-3 rounded-xl">
                 {/* Horizontal Baseline position */}
                 <div className="flex items-center gap-3">

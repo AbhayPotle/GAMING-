@@ -144,7 +144,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
 
       // Simulator dashboard screen
       return (
-        <div className="absolute inset-0 flex flex-col md:flex-row bg-slate-950 p-6 gap-6 overflow-y-auto">
+        <div className="absolute inset-0 simulator-dashboard-layout bg-slate-950 p-6 gap-6 overflow-y-auto">
           {/* Simulator Controls & Upgrades */}
           <div className="flex-1 flex flex-col justify-between space-y-4">
             <div>
@@ -282,7 +282,7 @@ export default function ArcadeCabin({ game, onClose, onGameComplete }) {
             </div>
           </div>
 
-          <div className="hidden sm:flex flex-col items-center">
+          <div className="flex-col items-center hide-on-mobile-flex">
             <div className="flex gap-4">
               <div className="w-3.5 h-3.5 rounded-full bg-cyan-500 animate-pulse"></div>
               <div className="w-3.5 h-3.5 rounded-full bg-pink-500 animate-pulse"></div>

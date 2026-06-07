@@ -31,6 +31,21 @@ export default function TypeStorm({ onComplete, onQuit }) {
     laserBeam: null
   });
 
+  const spawnParticles = (x, y, color) => {
+    for (let i = 0; i < 15; i++) {
+      gameStateRef.current.particles.push({
+        x,
+        y,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() - 0.5) * 6,
+        radius: Math.random() * 3 + 1.5,
+        color,
+        alpha: 1,
+        life: 0.03 + Math.random() * 0.02
+      });
+    }
+  };
+
   const handleStartGame = () => {
     SoundManager.playClick();
     setIsPlaying(true);
@@ -83,21 +98,6 @@ export default function TypeStorm({ onComplete, onQuit }) {
         speed: 0.6 + currentLevel * 0.15 + Math.random() * 0.3,
         size
       });
-    };
-
-    const spawnParticles = (x, y, color) => {
-      for (let i = 0; i < 15; i++) {
-        gameStateRef.current.particles.push({
-          x,
-          y,
-          vx: (Math.random() - 0.5) * 6,
-          vy: (Math.random() - 0.5) * 6,
-          radius: Math.random() * 3 + 1.5,
-          color,
-          alpha: 1,
-          life: 0.03 + Math.random() * 0.02
-        });
-      }
     };
 
     const updateGame = () => {

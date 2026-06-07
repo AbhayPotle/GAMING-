@@ -51,9 +51,9 @@ export default function GameGrid({ games, onSelectGame }) {
   return (
     <div className="flex-1 space-y-6">
       {/* Search and Filter Controls */}
-      <div className="glass-panel p-5 border border-white/10 flex flex-col md:flex-row items-center gap-4">
+      <div className="glass-panel p-5 border border-white/10 grid-controls-panel">
         {/* Search Bar */}
-        <div className="relative w-full md:flex-1">
+        <div className="search-input-wrapper">
           <Search className="absolute left-3.5 top-3 w-5 h-5 text-gray-500" />
           <input
             type="text"
@@ -65,19 +65,19 @@ export default function GameGrid({ games, onSelectGame }) {
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
+        <div className="grid-actions-wrapper">
           {/* Playable Toggle */}
           <button
             onClick={handleTogglePlayable}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-bold transition-all ${
               playableOnly 
-                ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 shadow-[0_0_10px_rgba(0,240,255,0.15)]' 
+                ? 'bg-cyan-500/10 border-cyan-400 text-cyan-400 shadow-cyan-sm' 
                 : 'bg-white/5 border-white/10 hover:border-white/20 text-gray-300'
             }`}
           >
             <PlayCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">Playable Only</span>
-            <span className="sm:hidden">Playable</span>
+            <span className="hide-on-mobile">Playable Only</span>
+            <span className="show-on-mobile">Playable</span>
           </button>
 
           {/* Sort Selector */}
@@ -122,7 +122,7 @@ export default function GameGrid({ games, onSelectGame }) {
 
       {/* Games Grid */}
       {filteredGames.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="games-grid-layout">
           {filteredGames.map((game) => (
             <GameCard 
               key={game.id} 

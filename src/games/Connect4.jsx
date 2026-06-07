@@ -6,6 +6,11 @@ import { Play, RotateCcw, User, Cpu, Circle } from 'lucide-react';
 const COLS = 7;
 const ROWS = 6;
 
+// Helper defined outside component to satisfy React purity check rules
+const getRandomItem = (arr) => {
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+
 export default function Connect4({ onComplete, onQuit }) {
   const [board, setBoard] = useState(Array(ROWS).fill(null).map(() => Array(COLS).fill(null)));
   const [isPlaying, setIsPlaying] = useState(false);
@@ -141,7 +146,7 @@ export default function Connect4({ onComplete, onQuit }) {
 
     if (chosenCol === -1) {
       // Pick random
-      chosenCol = validCols[Math.floor(Math.random() * validCols.length)];
+      chosenCol = getRandomItem(validCols);
     }
 
     const row = getLowestEmptyRow(chosenCol, currentBoard);
@@ -166,7 +171,7 @@ export default function Connect4({ onComplete, onQuit }) {
       "Nice move earlier! 👍",
       "This grid is mine! ♟️"
     ];
-    setBotMessage(reactList[Math.floor(Math.random() * reactList.length)]);
+    setBotMessage(getRandomItem(reactList));
   };
 
   const handleGameOver = (winResult) => {

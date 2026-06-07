@@ -75,9 +75,9 @@ export default function App() {
       />
 
       {/* Main Layout Area */}
-      <main className="flex-1 flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full max-w-[1600px] mx-auto overflow-hidden">
+      <main className="flex-1 flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full max-w-[1600px] mx-auto">
         {/* Games Section */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1">
           <div className="mb-6">
             <h2 className="text-xl font-bold tracking-widest text-cyan-400 mb-1 uppercase text-glow-cyan">GAMES DECK</h2>
             <p className="text-xs text-gray-500 font-bold uppercase">Select from our 66 8K-optimized multiplayer & arcade games below</p>

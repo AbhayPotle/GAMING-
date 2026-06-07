@@ -114,7 +114,7 @@ export default function ChatLobby({ profile }) {
   };
 
   return (
-    <div className="glass-panel w-full lg:w-[320px] flex flex-col h-[500px] lg:h-[calc(100vh-140px)] border border-white/10 shrink-0">
+    <div className="glass-panel w-full lg:w-[320px] flex flex-col h-[500px] lg:h-[calc(100vh-140px)] border border-white/10 shrink-0 sticky-sidebar">
       {/* Header */}
       <div className="p-4 border-b border-white/10 flex items-center justify-between bg-white/5">
         <div className="flex items-center gap-2">
